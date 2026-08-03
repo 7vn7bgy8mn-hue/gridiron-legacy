@@ -91,6 +91,10 @@
   .stat-box .label{font-family:var(--mono);font-size:.65rem;color:rgba(242,237,225,.5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
   .stat-box .value{font-family:'Anton',sans-serif;font-size:1.3rem;}
   .stat-box .value.gold{color:var(--gold);}
+  .stat-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:560px){.stat-grid.cols-4{grid-template-columns:repeat(2,1fr);}}
+  .recap-headline{background:var(--turf-dark);border:1px solid var(--line-white);border-left:3px solid var(--gold);padding:22px 24px;margin-bottom:28px;}
+  .recap-headline p{font-style:italic;font-size:1.02rem;line-height:1.6;color:rgba(242,237,225,.88);font-weight:300;}
 
   .event-log{max-height:260px; overflow-y:auto; padding-right:6px;}
   .event-item{padding:12px 0; border-bottom:1px solid var(--line-white);}
@@ -265,7 +269,6 @@
 
     <div class="cta-row" style="margin-top:34px;">
       <button class="cta-primary" id="playSeasonBtn" onclick="playSeason()">Jouer la saison →</button>
-      <button class="cta-secondary" onclick="openBadges('screen-dash')">Voir le Palmarès</button>
       <button class="cta-secondary" id="retireBtn" onclick="retireNow()">Prendre ma retraite</button>
     </div>
   </div>
@@ -295,6 +298,24 @@
     <div class="cta-row">
       <button class="cta-primary" id="mercatoLeaveBtn">Accepter le transfert →</button>
       <button class="cta-secondary" id="mercatoStayBtn">Rester au club</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN 3.65 : BILAN DE SAISON -->
+<section class="screen" id="screen-recap">
+  <div class="wrap">
+    <div class="down-marker">BILAN DE SAISON</div>
+    <div class="section-head" style="border:none; padding-bottom:0; margin-bottom:28px;">
+      <span class="section-num" id="recapSeasonNum">SAISON 1</span>
+      <span class="section-title" id="recapClub">Club</span>
+    </div>
+    <div class="recap-headline"><p id="recapHeadline"></p></div>
+    <div class="stat-grid cols-4" id="recapStatGrid" style="margin-bottom:30px;"></div>
+    <div id="recapTrophies" style="margin-bottom:26px;"></div>
+    <div id="recapExtra"></div>
+    <div class="cta-row" style="margin-top:20px;">
+      <button class="cta-primary" onclick="closeSeasonRecap()">Continuer →</button>
     </div>
   </div>
 </section>
@@ -409,22 +430,34 @@ const LEVEL_SALARY = {
   "Régional":[8,18], "National":[20,45], "Division 2":[50,120],
   "Division 1":[150,450], "Élite européenne":[500,1500]
 };
+const LEVEL_TIER = {"Régional":1, "National":2, "Division 2":3, "Division 1":4, "Élite européenne":5};
 const LOCAL_PREFIXES = ["AS","FC","Racing Club","Olympique","US","Real","Sporting","Étoile","Union"];
 const GENERIC_CLUBS = [
-  {name:"Real Fuego", level:"Division 1", country:"Espagne"},
-  {name:"AC Tempête", level:"Division 1", country:"Italie"},
-  {name:"Dynamo Nord", level:"Division 2", country:"Belgique"},
-  {name:"FC Horizon", level:"National", country:"Suisse"},
-  {name:"Étoile du Sud", level:"Régional", country:"France"},
-  {name:"Sporting Aurora", level:"Élite européenne", country:"Portugal"},
-  {name:"Union Continentale", level:"Division 1", country:"Pays-Bas"},
-  {name:"Atlas FC", level:"Division 2", country:"Maroc"},
+  {name:"Real Madril", level:"Élite européenne", country:"Espagne"},
+  {name:"FC Barcelina", level:"Élite européenne", country:"Espagne"},
+  {name:"Manchester Unido", level:"Élite européenne", country:"Angleterre"},
+  {name:"Liverpol FC", level:"Élite européenne", country:"Angleterre"},
+  {name:"FC Baviera", level:"Élite européenne", country:"Allemagne"},
+  {name:"Paris SC", level:"Élite européenne", country:"France"},
+  {name:"Juventude Torino", level:"Élite européenne", country:"Italie"},
+  {name:"Benfiquense", level:"Élite européenne", country:"Portugal"},
+  {name:"Manchester Cité", level:"Division 1", country:"Angleterre"},
+  {name:"Chelsey FC", level:"Division 1", country:"Angleterre"},
+  {name:"Borussia Westfalia", level:"Division 1", country:"Allemagne"},
+  {name:"AC Milano", level:"Division 1", country:"Italie"},
+  {name:"Internazionale Lombardia", level:"Division 1", country:"Italie"},
+  {name:"Phocéen Olympique", level:"Division 1", country:"France"},
+  {name:"AFC Amstel", level:"Division 1", country:"Pays-Bas"},
   {name:"River Nova", level:"Division 1", country:"Argentine"},
+  {name:"Mengão FC", level:"Division 1", country:"Brésil"},
+  {name:"Dynamo Nord", level:"Division 2", country:"Belgique"},
+  {name:"Atlas FC", level:"Division 2", country:"Maroc"},
+  {name:"Sparta Faucon", level:"Division 2", country:"Croatie"},
+  {name:"FC Horizon", level:"National", country:"Suisse"},
+  {name:"Celta Marée", level:"National", country:"Uruguay"},
   {name:"Lions de l'Atlantique", level:"National", country:"Sénégal"},
-  {name:"Panthères Noires", level:"Division 2", country:"Cameroun"},
-  {name:"Vikings FC", level:"Élite européenne", country:"Norvège"},
-  {name:"Sparta Faucon", level:"Division 1", country:"Croatie"},
-  {name:"Celta Marée", level:"National", country:"Uruguay"}
+  {name:"Panthères Noires", level:"Régional", country:"Cameroun"},
+  {name:"Étoile du Sud", level:"Régional", country:"France"}
 ];
 
 const STORAGE_KEY = "football_career_save_v1";
@@ -559,7 +592,7 @@ function showScreen(id){
 function updateNavStat(){
   const nav = document.getElementById('navStat');
   if(state && !state.retired){
-    nav.innerHTML = `<b>${state.age} ANS</b> · ${posLabel(state.position)} · OVR <b>${state.overall}</b> <button class="nav-link" onclick="openBadges('screen-dash')">Palmarès</button>`;
+    nav.innerHTML = `<b>${state.age} ANS</b> · ${posLabel(state.position)} · OVR <b>${state.overall}</b>`;
   } else { nav.innerHTML = ''; }
 }
 function posLabel(k){ const p = POSITIONS.find(p=>p.k===k); return p?p.label:k; }
@@ -972,31 +1005,62 @@ function finalizeSeason(){
   state.salary = Math.round(state.salary * (1 + (state.overall-60)/300 + state.salaryBoost*0.3));
   if(state.salary < 15000) state.salary = 15000;
 
+  // --- Statistiques de la saison (pour le bilan) ---
+  const perf = (state.overall/99) * (state.form/100);
+  const matches = clamp(rnd(22,34) + Math.round((state.form-50)/12), 6, 38);
+  const goals = Math.max(0, Math.round(rnd(1,9) * perf * (matches/28)));
+  const assists = Math.max(0, Math.round(rnd(1,7) * perf * (matches/28)));
+  const note = Math.min(9.6, Math.max(4.8, 5.4 + perf*3.4 + rnd(-4,4)/10)).toFixed(1);
+
+  // --- Trophées, liés au niveau du club (plus le club est haut, plus les chances sont élevées) ---
+  const tier = LEVEL_TIER[state.division] || 1;
+  const tierFactor = tier/5;
+  const seasonTrophies = [];
+  let tag = null;
+
+  const champThreshold = 78 - tier*4;
+  if(state.overall >= champThreshold && Math.random() < (0.05 + tierFactor*0.22)){
+    state.achievements.push('Titre de champion');
+    seasonTrophies.push({icon:'🥇', label:`Champion (${state.division})`});
+    tag = 'CHAMPION';
+  }
+  if(Math.random() < (0.06 + tierFactor*0.10)){
+    state.achievements.push('Coupe nationale');
+    seasonTrophies.push({icon:'🏆', label:'Vainqueur de la Coupe nationale'});
+    if(!tag) tag = 'COUPE';
+  }
+  if(tier>=4 && state.overall>=82 && Math.random() < (tierFactor*0.16)){
+    state.achievements.push('Ligue des Champions');
+    seasonTrophies.push({icon:'⭐', label:'Sacre en Ligue des Champions'});
+    tag = 'LIGUE DES CHAMPIONS';
+  }
+  if(state.overall >= (86 - tier*2) && Math.random() < (0.10 + tierFactor*0.22) && !state.achievements.includes('Sélection internationale')){
+    state.achievements.push('Sélection internationale');
+    state.selectionsCount = (state.selectionsCount||0) + rnd(2,6);
+    seasonTrophies.push({icon:'🎖️', label:`Sélection nationale (${state.selectionsCount} sélections au total)`});
+    if(!tag) tag = 'SÉLECTION';
+  } else if(state.achievements.includes('Sélection internationale') && Math.random() < 0.4){
+    state.selectionsCount = (state.selectionsCount||0) + rnd(1,4);
+  }
+  if(state.overall >= 94 && !state.achievements.includes('Meilleur de son championnat')){
+    state.achievements.push('Meilleur de son championnat');
+    seasonTrophies.push({icon:'🥇', label:'Meilleur joueur du championnat'});
+    tag='MEILLEUR JOUEUR';
+  }
+  if(state.overall >= 92 && Math.random() < (0.10 + tierFactor*0.18) && !state.achievements.includes("Ballon d'Or")){
+    state.achievements.push("Ballon d'Or");
+    seasonTrophies.push({icon:'🏅', label:"Ballon d'Or"});
+    tag = "BALLON D'OR";
+  }
+
   // Season narrative
   let seasonText = `Saison ${state.proSeasons} avec ${state.team} : `;
   if(state.overall >= 85) seasonText += "une année exceptionnelle, parmi les meilleurs à votre poste.";
   else if(state.overall >= 70) seasonText += "une saison solide qui confirme votre statut de titulaire.";
   else if(state.overall >= 55) seasonText += "une saison correcte, en quête de régularité.";
   else seasonText += "une saison compliquée, la concurrence est rude.";
-
-  let tag = null;
-  // Achievements (trophées de saison)
-  if(state.overall >= 88 && !state.achievements.includes('Sélection internationale')){
-    state.achievements.push('Sélection internationale'); tag='SÉLECTION';
-  } else if(state.overall >= 94 && !state.achievements.includes('Meilleur de son championnat')){
-    state.achievements.push('Meilleur de son championnat'); tag='MEILLEUR JOUEUR';
-  }
-  if(state.overall >= 92 && Math.random() < 0.25 && !state.achievements.includes("Ballon d'Or")){
-    state.achievements.push("Ballon d'Or"); tag='BALLON D\'OR';
-  }
-  if(state.overall >= 80 && Math.random() < 0.18){
-    state.achievements.push('Titre de champion'); tag='CHAMPION';
-    seasonText = `Saison ${state.proSeasons} : titre de champion avec ${state.team} ! Un sommet de carrière.`;
-  }
-  if(state.overall >= 85 && Math.random() < 0.1 && !state.achievements.includes('Ligue des Champions')){
-    state.achievements.push('Ligue des Champions'); tag='LIGUE DES CHAMPIONS';
-    seasonText = `Saison ${state.proSeasons} : sacre en Ligue des Champions avec ${state.team} !`;
-  }
+  if(tag === 'CHAMPION') seasonText = `Saison ${state.proSeasons} : titre de champion avec ${state.team} ! Un sommet de carrière.`;
+  if(tag === 'LIGUE DES CHAMPIONS') seasonText = `Saison ${state.proSeasons} : sacre en Ligue des Champions avec ${state.team} !`;
 
   state.history.push({age:state.age, text:seasonText + ' ' + ev.text, tag});
   save();
@@ -1004,18 +1068,85 @@ function finalizeSeason(){
   checkBadges();
   save();
 
-  // Retirement checks
-  const forcedRetire = state.age >= 40;
-  const declineRetire = state.age >= 34 && state.overall < 45;
-  if(forcedRetire || declineRetire){
-    retireNow(forcedRetire ? "Après une longue carrière, votre corps ne suit plus le rythme du haut niveau." : "En perte de vitesse, vous décidez de raccrocher les crampons.");
-    return;
+  // --- Objectif du club, lié au niveau ---
+  const objective = getSeasonObjective(tier);
+  let bonus = 0;
+  if(objective.success){
+    bonus = Math.round(state.salary * (0.05 + tierFactor*0.15));
+    state.salary += bonus;
   }
 
+  // Retirement checks — résolu au clic sur "Continuer" du bilan de saison
+  const forcedRetire = state.age >= 40;
+  const declineRetire = state.age >= 34 && state.overall < 45;
+  state._pendingRetirement = (forcedRetire || declineRetire)
+    ? (forcedRetire ? "Après une longue carrière, votre corps ne suit plus le rythme du haut niveau." : "En perte de vitesse, vous décidez de raccrocher les crampons.")
+    : null;
+  save();
+
+  renderSeasonRecap({matches, goals, assists, note, seasonTrophies, tag, ev, objective, bonus});
+  showScreen('screen-recap');
+}
+function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+function getSeasonObjective(tier){
+  const defs = {
+    5:{text:"Performer sur la scène européenne", threshold:80},
+    4:{text:"Terminer dans le haut de tableau", threshold:72},
+    3:{text:"Viser la montée en division supérieure", threshold:62},
+    2:{text:"Confirmer au niveau national", threshold:52},
+    1:{text:"Progresser et se faire remarquer", threshold:45}
+  };
+  const d = defs[tier] || defs[1];
+  return {text:d.text, success: state.overall >= d.threshold};
+}
+
+function renderSeasonRecap(data){
+  const {matches, goals, assists, note, seasonTrophies, tag, ev, objective, bonus} = data;
+  document.getElementById('recapSeasonNum').textContent = `SAISON ${state.proSeasons}`;
+  document.getElementById('recapClub').textContent = `${state.team} · ${state.division}`;
+
+  let headline;
+  if(tag === 'CHAMPION') headline = `« ${state.team} sur le toit : une saison de champion portée par ses cadres. »`;
+  else if(tag === 'LIGUE DES CHAMPIONS') headline = `« Nuit européenne historique pour ${state.team}. »`;
+  else if(tag === "BALLON D'OR") headline = `« Le monde du foot s'incline : un Ballon d'Or amplement mérité. »`;
+  else if(tag === 'SÉLECTION') headline = `« Un nouveau visage s'installe chez les sélectionnés nationaux. »`;
+  else if(tag === 'COUPE') headline = `« ${state.team} ajoute une ligne à son armoire à trophées. »`;
+  else if(state.overall >= 80) headline = `« ${state.team} peut compter sur une saison référence de son effectif. »`;
+  else if(state.overall < 50) headline = `« Une saison à oublier vite pour ${state.team}. »`;
+  else headline = `« Saison ${state.proSeasons} : ${state.team} poursuit sa route, sans éclat particulier. »`;
+  document.getElementById('recapHeadline').textContent = headline;
+
+  document.getElementById('recapStatGrid').innerHTML = `
+    <div class="stat-box"><div class="label">Matchs</div><div class="value">${matches}</div></div>
+    <div class="stat-box"><div class="label">Buts</div><div class="value gold">${goals}</div></div>
+    <div class="stat-box"><div class="label">Passes déc.</div><div class="value">${assists}</div></div>
+    <div class="stat-box"><div class="label">Note</div><div class="value gold">${note}</div></div>
+  `;
+
+  const trophiesEl = document.getElementById('recapTrophies');
+  trophiesEl.innerHTML = `<div class="bar-label" style="margin-bottom:10px;"><span>Trophées de la saison</span></div>` +
+    (seasonTrophies.length
+      ? `<div class="achv-grid">${seasonTrophies.map(t=>`<span class="achv-chip">${t.icon} ${t.label}</span>`).join('')}</div>`
+      : `<span style="color:rgba(242,237,225,.4); font-size:.82rem;">Aucun trophée cette saison.</span>`);
+
+  document.getElementById('recapExtra').innerHTML = `
+    <div class="event-item"><p>${objective.success ? '✅' : '❌'} Objectif du club : ${objective.text}${objective.success && bonus ? ` (prime +${fmtSalary(bonus)})` : ''}</p></div>
+    <div class="event-item"><p>💰 Salaire actuel : ${fmtSalary(state.salary)} / an</p></div>
+    <div class="event-item"><p>📰 ${ev.text}</p></div>
+  `;
+}
+
+function closeSeasonRecap(){
+  if(state._pendingRetirement){
+    const reason = state._pendingRetirement;
+    state._pendingRetirement = null;
+    retireNow(reason);
+    return;
+  }
   showScreen('screen-dash');
   renderDashboard();
 }
-function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
 
 function retireNow(customReason){
   state.retired = true;
