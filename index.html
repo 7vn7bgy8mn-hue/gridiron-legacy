@@ -306,10 +306,11 @@
 <section class="screen" id="screen-recap">
   <div class="wrap">
     <div class="down-marker">BILAN DE SAISON</div>
-    <div class="section-head" style="border:none; padding-bottom:0; margin-bottom:28px;">
+    <div class="section-head" style="border:none; padding-bottom:0; margin-bottom:6px;">
       <span class="section-num" id="recapSeasonNum">SAISON 1</span>
       <span class="section-title" id="recapClub">Club</span>
     </div>
+    <div class="bar-label" id="recapSalaryTop" style="margin-bottom:26px; color:var(--gold); text-transform:none; font-size:.82rem;">💰 Salaire annuel : —</div>
     <div class="recap-headline"><p id="recapHeadline"></p></div>
     <div class="stat-grid cols-4" id="recapStatGrid" style="margin-bottom:30px;"></div>
     <div id="recapTrophies" style="margin-bottom:26px;"></div>
@@ -428,36 +429,59 @@ const ENTOURAGE = [
 
 const LEVEL_SALARY = {
   "Régional":[8,18], "National":[20,45], "Division 2":[50,120],
-  "Division 1":[150,450], "Élite européenne":[500,1500]
+  "Division 1":[150,450], "Élite":[500,1500]
 };
-const LEVEL_TIER = {"Régional":1, "National":2, "Division 2":3, "Division 1":4, "Élite européenne":5};
+const LEVEL_TIER = {"Régional":1, "National":2, "Division 2":3, "Division 1":4, "Élite":5};
 const LOCAL_PREFIXES = ["AS","FC","Racing Club","Olympique","US","Real","Sporting","Étoile","Union"];
 const GENERIC_CLUBS = [
-  {name:"Real Madril", level:"Élite européenne", country:"Espagne"},
-  {name:"FC Barcelina", level:"Élite européenne", country:"Espagne"},
-  {name:"Manchester Unido", level:"Élite européenne", country:"Angleterre"},
-  {name:"Liverpol FC", level:"Élite européenne", country:"Angleterre"},
-  {name:"FC Baviera", level:"Élite européenne", country:"Allemagne"},
-  {name:"Paris SC", level:"Élite européenne", country:"France"},
-  {name:"Juventude Torino", level:"Élite européenne", country:"Italie"},
-  {name:"Benfiquense", level:"Élite européenne", country:"Portugal"},
-  {name:"Manchester Cité", level:"Division 1", country:"Angleterre"},
-  {name:"Chelsey FC", level:"Division 1", country:"Angleterre"},
-  {name:"Borussia Westfalia", level:"Division 1", country:"Allemagne"},
-  {name:"AC Milano", level:"Division 1", country:"Italie"},
-  {name:"Internazionale Lombardia", level:"Division 1", country:"Italie"},
-  {name:"Phocéen Olympique", level:"Division 1", country:"France"},
-  {name:"AFC Amstel", level:"Division 1", country:"Pays-Bas"},
-  {name:"River Nova", level:"Division 1", country:"Argentine"},
-  {name:"Mengão FC", level:"Division 1", country:"Brésil"},
-  {name:"Dynamo Nord", level:"Division 2", country:"Belgique"},
-  {name:"Atlas FC", level:"Division 2", country:"Maroc"},
-  {name:"Sparta Faucon", level:"Division 2", country:"Croatie"},
-  {name:"FC Horizon", level:"National", country:"Suisse"},
-  {name:"Celta Marée", level:"National", country:"Uruguay"},
-  {name:"Lions de l'Atlantique", level:"National", country:"Sénégal"},
-  {name:"Panthères Noires", level:"Régional", country:"Cameroun"},
-  {name:"Étoile du Sud", level:"Régional", country:"France"}
+  // --- Clubs de foot (style européen) ---
+  {name:"Real Madril", level:"Élite", country:"Espagne", league:"euro"},
+  {name:"FC Barcelina", level:"Élite", country:"Espagne", league:"euro"},
+  {name:"Manchester Unido", level:"Élite", country:"Angleterre", league:"euro"},
+  {name:"Liverpol FC", level:"Élite", country:"Angleterre", league:"euro"},
+  {name:"FC Baviera", level:"Élite", country:"Allemagne", league:"euro"},
+  {name:"Paris SC", level:"Élite", country:"France", league:"euro"},
+  {name:"Juventude Torino", level:"Élite", country:"Italie", league:"euro"},
+  {name:"Benfiquense", level:"Élite", country:"Portugal", league:"euro"},
+  {name:"Manchester Cité", level:"Division 1", country:"Angleterre", league:"euro"},
+  {name:"Chelsey FC", level:"Division 1", country:"Angleterre", league:"euro"},
+  {name:"Borussia Westfalia", level:"Division 1", country:"Allemagne", league:"euro"},
+  {name:"AC Milano", level:"Division 1", country:"Italie", league:"euro"},
+  {name:"Internazionale Lombardia", level:"Division 1", country:"Italie", league:"euro"},
+  {name:"Phocéen Olympique", level:"Division 1", country:"France", league:"euro"},
+  {name:"AFC Amstel", level:"Division 1", country:"Pays-Bas", league:"euro"},
+  {name:"River Nova", level:"Division 1", country:"Argentine", league:"euro"},
+  {name:"Mengão FC", level:"Division 1", country:"Brésil", league:"euro"},
+  {name:"Dynamo Nord", level:"Division 2", country:"Belgique", league:"euro"},
+  {name:"Atlas FC", level:"Division 2", country:"Maroc", league:"euro"},
+  {name:"Sparta Faucon", level:"Division 2", country:"Croatie", league:"euro"},
+  {name:"FC Horizon", level:"National", country:"Suisse", league:"euro"},
+  {name:"Celta Marée", level:"National", country:"Uruguay", league:"euro"},
+  {name:"Lions de l'Atlantique", level:"National", country:"Sénégal", league:"euro"},
+  {name:"Panthères Noires", level:"Régional", country:"Cameroun", league:"euro"},
+  {name:"Étoile du Sud", level:"Régional", country:"France", league:"euro"},
+  // --- Franchises NFL (noms réels modifiés) ---
+  {name:"Dallas Cowpokes", level:"Élite", country:"États-Unis", league:"nfl"},
+  {name:"New England Minutemen", level:"Élite", country:"États-Unis", league:"nfl"},
+  {name:"Kansas City Chieftains", level:"Élite", country:"États-Unis", league:"nfl"},
+  {name:"San Francisco Prospectors", level:"Élite", country:"États-Unis", league:"nfl"},
+  {name:"Green Bay Icemen", level:"Élite", country:"États-Unis", league:"nfl"},
+  {name:"Pittsburgh Ironmen", level:"Élite", country:"États-Unis", league:"nfl"},
+  {name:"Miami Barracudas", level:"Élite", country:"États-Unis", league:"nfl"},
+  {name:"Seattle Ospreys", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Denver Mustangs", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Philadelphia Liberty", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Buffalo Bisons", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Chicago Grizzlies", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Baltimore Crows", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Las Vegas Marauders", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"New York Empire", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Los Angeles Stallions", level:"Division 1", country:"États-Unis", league:"nfl"},
+  {name:"Paris Musketeers", level:"Division 2", country:"France", league:"nfl"},
+  {name:"London Kingsmen", level:"Division 2", country:"Angleterre", league:"nfl"},
+  {name:"Munich Lions", level:"Division 2", country:"Allemagne", league:"nfl"},
+  {name:"Mexico City Aztecs", level:"Division 2", country:"Mexique", league:"nfl"},
+  {name:"São Paulo Jaguars", level:"Division 2", country:"Brésil", league:"nfl"}
 ];
 
 const STORAGE_KEY = "football_career_save_v1";
@@ -683,6 +707,7 @@ function finishDraft(){
     team: null,
     division: null,
     clubCountry: null,
+    clubLeague: null,
     salary: 0,
     overall: rnd(38,52),
     primaryStat: 0,
@@ -725,7 +750,7 @@ function generateClubOffers(){
   const localLevel = pick(localLevels);
   const localSalaryRange = LEVEL_SALARY[localLevel];
   const local = {
-    name: localName, level: localLevel, country: natLabel(state.nationality),
+    name: localName, level: localLevel, country: natLabel(state.nationality), league:"euro",
     salary: rnd(localSalaryRange[0], localSalaryRange[1]) * 1000,
     desc: "Un club formateur, proche de chez vous. Idéal pour progresser sans pression."
   };
@@ -741,7 +766,7 @@ function clubDesc(level){
     "National":"Un championnat sérieux, la concurrence commence à monter.",
     "Division 2":"Un club ambitieux qui vise la montée.",
     "Division 1":"L'élite nationale, chaque match compte double.",
-    "Élite européenne":"Un cador continental, la pression sera immense."
+    "Élite":"Un cador, la pression sera immense."
   };
   return map[level] || "Un club prêt à vous faire confiance.";
 }
@@ -762,6 +787,7 @@ function confirmClub(club){
   state.team = club.name;
   state.division = club.level;
   state.clubCountry = club.country;
+  state.clubLeague = club.league || "euro";
   state.salary = club.salary;
   state.clubsHistory.push(club.name);
   if(!state.countriesPlayed.includes(club.country)) state.countriesPlayed.push(club.country);
@@ -905,6 +931,7 @@ function resolveMercato(leave, club, salary){
     state.team = club.name;
     state.division = club.level;
     state.clubCountry = club.country;
+    state.clubLeague = club.league || "euro";
     state.salary = salary;
     state.clubsHistory.push(club.name);
     if(!state.countriesPlayed.includes(club.country)) state.countriesPlayed.push(club.country);
@@ -970,6 +997,35 @@ function playSeason(){
   beginSeasonFlow();
 }
 
+const TROPHY_SET = {
+  euro: {
+    league:{name:'Titre de champion', icon:'🥇'},
+    cup:{name:'Coupe nationale', icon:'🏆'},
+    continental:{name:'Ligue des Champions', icon:'⭐'},
+    selection:{name:'Sélection internationale', icon:'🎖️'},
+    mvp:{name:'Meilleur de son championnat', icon:'🥇'},
+    finalsMvp:{name:"Ballon d'Or", icon:'🏅'}
+  },
+  nfl: {
+    league:{name:'Champion de Conférence', icon:'🥇'},
+    cup:{name:'Meilleur bilan de la ligue', icon:'🏆'},
+    continental:{name:'Super Bowl', icon:'⭐'},
+    selection:{name:'Sélection au Pro Bowl', icon:'🎖️'},
+    mvp:{name:'MVP de la Ligue', icon:'🥇'},
+    finalsMvp:{name:'MVP du Super Bowl', icon:'🏅'}
+  }
+};
+const POS_SEASON_STATS = {
+  QB:{p:"Yards de passe", s:"Touchdowns (passes)", pv:(perf,m)=>Math.round(rnd(2200,3600)*perf)+Math.round(m*8), sv:(perf,m)=>Math.round(rnd(10,26)*perf)},
+  RB:{p:"Yards au sol", s:"Touchdowns", pv:(perf,m)=>Math.round(rnd(500,1200)*perf)+Math.round(m*6), sv:(perf,m)=>Math.round(rnd(2,12)*perf)},
+  WR:{p:"Yards de réception", s:"Touchdowns", pv:(perf,m)=>Math.round(rnd(450,1100)*perf)+Math.round(m*6), sv:(perf,m)=>Math.round(rnd(2,10)*perf)},
+  TE:{p:"Réceptions", s:"Yards", pv:(perf,m)=>Math.round(rnd(18,60)*perf), sv:(perf,m)=>Math.round(rnd(180,650)*perf)},
+  LB:{p:"Tacles", s:"Sacks", pv:(perf,m)=>Math.round(rnd(35,110)*perf), sv:(perf,m)=>Math.round(rnd(1,9)*perf)},
+  CB:{p:"Interceptions", s:"Tacles", pv:(perf,m)=>Math.round(rnd(0,7)*perf), sv:(perf,m)=>Math.round(rnd(25,70)*perf)},
+  S:{p:"Tacles", s:"Interceptions", pv:(perf,m)=>Math.round(rnd(35,90)*perf), sv:(perf,m)=>Math.round(rnd(0,6)*perf)},
+  K:{p:"Field Goals réussis", s:"Réussite", pv:(perf,m)=>Math.round(rnd(12,30)*perf), sv:(perf,m)=>Math.round(65+perf*30)+"%"}
+};
+
 function finalizeSeason(){
   // Random event
   const ev = pick(EVENT_POOL);
@@ -1005,52 +1061,60 @@ function finalizeSeason(){
   state.salary = Math.round(state.salary * (1 + (state.overall-60)/300 + state.salaryBoost*0.3));
   if(state.salary < 15000) state.salary = 15000;
 
-  // --- Statistiques de la saison (pour le bilan) ---
+  // --- Statistiques de la saison (pour le bilan), liées au poste ---
   const perf = (state.overall/99) * (state.form/100);
   const matches = clamp(rnd(22,34) + Math.round((state.form-50)/12), 6, 38);
-  const goals = Math.max(0, Math.round(rnd(1,9) * perf * (matches/28)));
-  const assists = Math.max(0, Math.round(rnd(1,7) * perf * (matches/28)));
+  const posStats = POS_SEASON_STATS[state.position] || POS_SEASON_STATS.QB;
+  const primaryVal = posStats.pv(perf, matches);
+  const secondaryVal = posStats.sv(perf, matches);
   const note = Math.min(9.6, Math.max(4.8, 5.4 + perf*3.4 + rnd(-4,4)/10)).toFixed(1);
 
-  // --- Trophées, liés au niveau du club (plus le club est haut, plus les chances sont élevées) ---
+  // --- Trophées, liés au niveau du club ET à la ligue actuelle (Europe / NFL) ---
   const tier = LEVEL_TIER[state.division] || 1;
   const tierFactor = tier/5;
+  const T = TROPHY_SET[state.clubLeague] || TROPHY_SET.euro;
   const seasonTrophies = [];
   let tag = null;
 
   const champThreshold = 78 - tier*4;
   if(state.overall >= champThreshold && Math.random() < (0.05 + tierFactor*0.22)){
-    state.achievements.push('Titre de champion');
-    seasonTrophies.push({icon:'🥇', label:`Champion (${state.division})`});
+    state.achievements.push(T.league.name);
+    seasonTrophies.push({icon:T.league.icon, label:`${T.league.name} (${state.division})`});
     tag = 'CHAMPION';
   }
   if(Math.random() < (0.06 + tierFactor*0.10)){
-    state.achievements.push('Coupe nationale');
-    seasonTrophies.push({icon:'🏆', label:'Vainqueur de la Coupe nationale'});
+    state.achievements.push(T.cup.name);
+    seasonTrophies.push({icon:T.cup.icon, label:T.cup.name});
     if(!tag) tag = 'COUPE';
   }
   if(tier>=4 && state.overall>=82 && Math.random() < (tierFactor*0.16)){
-    state.achievements.push('Ligue des Champions');
-    seasonTrophies.push({icon:'⭐', label:'Sacre en Ligue des Champions'});
-    tag = 'LIGUE DES CHAMPIONS';
+    state.achievements.push(T.continental.name);
+    seasonTrophies.push({icon:T.continental.icon, label:T.continental.name});
+    tag = T.continental.name.toUpperCase();
   }
-  if(state.overall >= (86 - tier*2) && Math.random() < (0.10 + tierFactor*0.22) && !state.achievements.includes('Sélection internationale')){
-    state.achievements.push('Sélection internationale');
+  if(state.overall >= (86 - tier*2) && Math.random() < (0.10 + tierFactor*0.22) && !state.achievements.includes(T.selection.name)){
+    state.achievements.push(T.selection.name);
     state.selectionsCount = (state.selectionsCount||0) + rnd(2,6);
-    seasonTrophies.push({icon:'🎖️', label:`Sélection nationale (${state.selectionsCount} sélections au total)`});
+    seasonTrophies.push({icon:T.selection.icon, label:`${T.selection.name} (${state.selectionsCount} au total)`});
     if(!tag) tag = 'SÉLECTION';
-  } else if(state.achievements.includes('Sélection internationale') && Math.random() < 0.4){
+  } else if(state.achievements.includes(T.selection.name) && Math.random() < 0.4){
     state.selectionsCount = (state.selectionsCount||0) + rnd(1,4);
   }
-  if(state.overall >= 94 && !state.achievements.includes('Meilleur de son championnat')){
-    state.achievements.push('Meilleur de son championnat');
-    seasonTrophies.push({icon:'🥇', label:'Meilleur joueur du championnat'});
-    tag='MEILLEUR JOUEUR';
+  if(state.overall >= 94 && !state.achievements.includes(T.mvp.name)){
+    state.achievements.push(T.mvp.name);
+    seasonTrophies.push({icon:T.mvp.icon, label:T.mvp.name});
+    tag = T.mvp.name.toUpperCase();
   }
-  if(state.overall >= 92 && Math.random() < (0.10 + tierFactor*0.18) && !state.achievements.includes("Ballon d'Or")){
-    state.achievements.push("Ballon d'Or");
-    seasonTrophies.push({icon:'🏅', label:"Ballon d'Or"});
-    tag = "BALLON D'OR";
+  if(state.overall >= 92 && Math.random() < (0.10 + tierFactor*0.18) && !state.achievements.includes(T.finalsMvp.name)){
+    state.achievements.push(T.finalsMvp.name);
+    seasonTrophies.push({icon:T.finalsMvp.icon, label:T.finalsMvp.name});
+    tag = T.finalsMvp.name.toUpperCase();
+  }
+  // Jeux Olympiques : distinction rare, indépendante de la ligue du club
+  if(state.overall >= 90 && Math.random() < 0.04 && !state.achievements.includes('Jeux Olympiques')){
+    state.achievements.push('Jeux Olympiques');
+    seasonTrophies.push({icon:'🥇', label:'Sacre aux Jeux Olympiques'});
+    tag = 'JEUX OLYMPIQUES';
   }
 
   // Season narrative
@@ -1059,8 +1123,8 @@ function finalizeSeason(){
   else if(state.overall >= 70) seasonText += "une saison solide qui confirme votre statut de titulaire.";
   else if(state.overall >= 55) seasonText += "une saison correcte, en quête de régularité.";
   else seasonText += "une saison compliquée, la concurrence est rude.";
-  if(tag === 'CHAMPION') seasonText = `Saison ${state.proSeasons} : titre de champion avec ${state.team} ! Un sommet de carrière.`;
-  if(tag === 'LIGUE DES CHAMPIONS') seasonText = `Saison ${state.proSeasons} : sacre en Ligue des Champions avec ${state.team} !`;
+  if(tag === 'CHAMPION') seasonText = `Saison ${state.proSeasons} : ${T.league.name.toLowerCase()} avec ${state.team} ! Un sommet de carrière.`;
+  if(tag === T.continental.name.toUpperCase()) seasonText = `Saison ${state.proSeasons} : ${T.continental.name} remporté avec ${state.team} !`;
 
   state.history.push({age:state.age, text:seasonText + ' ' + ev.text, tag});
   save();
@@ -1084,7 +1148,7 @@ function finalizeSeason(){
     : null;
   save();
 
-  renderSeasonRecap({matches, goals, assists, note, seasonTrophies, tag, ev, objective, bonus});
+  renderSeasonRecap({matches, posStats, primaryVal, secondaryVal, note, seasonTrophies, tag, ev, objective, bonus});
   showScreen('screen-recap');
 }
 function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
@@ -1102,16 +1166,20 @@ function getSeasonObjective(tier){
 }
 
 function renderSeasonRecap(data){
-  const {matches, goals, assists, note, seasonTrophies, tag, ev, objective, bonus} = data;
+  const {matches, posStats, primaryVal, secondaryVal, note, seasonTrophies, tag, ev, objective, bonus} = data;
+  const T = TROPHY_SET[state.clubLeague] || TROPHY_SET.euro;
   document.getElementById('recapSeasonNum').textContent = `SAISON ${state.proSeasons}`;
-  document.getElementById('recapClub').textContent = `${state.team} · ${state.division}`;
+  document.getElementById('recapClub').textContent = `${state.team} · ${state.division}${state.clubLeague==='nfl' ? ' · NFL' : ''}`;
+  document.getElementById('recapSalaryTop').textContent = `💰 Salaire annuel : ${fmtSalary(state.salary)}`;
 
   let headline;
-  if(tag === 'CHAMPION') headline = `« ${state.team} sur le toit : une saison de champion portée par ses cadres. »`;
-  else if(tag === 'LIGUE DES CHAMPIONS') headline = `« Nuit européenne historique pour ${state.team}. »`;
-  else if(tag === "BALLON D'OR") headline = `« Le monde du foot s'incline : un Ballon d'Or amplement mérité. »`;
-  else if(tag === 'SÉLECTION') headline = `« Un nouveau visage s'installe chez les sélectionnés nationaux. »`;
+  if(tag === 'CHAMPION') headline = `« ${state.team} sur le toit : sacré ${T.league.name.toLowerCase()}, porté par ses cadres. »`;
+  else if(tag === T.continental.name.toUpperCase()) headline = `« ${state.team} au sommet : ${T.continental.name} remporté. »`;
+  else if(tag === T.finalsMvp.name.toUpperCase()) headline = `« Une distinction individuelle immense : ${T.finalsMvp.name}. »`;
+  else if(tag === T.mvp.name.toUpperCase()) headline = `« ${T.mvp.name} : la reconnaissance ultime pour une saison hors norme. »`;
+  else if(tag === 'SÉLECTION') headline = `« Un nouveau visage s'installe chez les sélectionnés. »`;
   else if(tag === 'COUPE') headline = `« ${state.team} ajoute une ligne à son armoire à trophées. »`;
+  else if(tag === 'JEUX OLYMPIQUES') headline = `« Consécration ultime : sacre aux Jeux Olympiques. »`;
   else if(state.overall >= 80) headline = `« ${state.team} peut compter sur une saison référence de son effectif. »`;
   else if(state.overall < 50) headline = `« Une saison à oublier vite pour ${state.team}. »`;
   else headline = `« Saison ${state.proSeasons} : ${state.team} poursuit sa route, sans éclat particulier. »`;
@@ -1119,8 +1187,8 @@ function renderSeasonRecap(data){
 
   document.getElementById('recapStatGrid').innerHTML = `
     <div class="stat-box"><div class="label">Matchs</div><div class="value">${matches}</div></div>
-    <div class="stat-box"><div class="label">Buts</div><div class="value gold">${goals}</div></div>
-    <div class="stat-box"><div class="label">Passes déc.</div><div class="value">${assists}</div></div>
+    <div class="stat-box"><div class="label">${posStats.p}</div><div class="value gold">${primaryVal}</div></div>
+    <div class="stat-box"><div class="label">${posStats.s}</div><div class="value">${secondaryVal}</div></div>
     <div class="stat-box"><div class="label">Note</div><div class="value gold">${note}</div></div>
   `;
 
@@ -1132,7 +1200,6 @@ function renderSeasonRecap(data){
 
   document.getElementById('recapExtra').innerHTML = `
     <div class="event-item"><p>${objective.success ? '✅' : '❌'} Objectif du club : ${objective.text}${objective.success && bonus ? ` (prime +${fmtSalary(bonus)})` : ''}</p></div>
-    <div class="event-item"><p>💰 Salaire actuel : ${fmtSalary(state.salary)} / an</p></div>
     <div class="event-item"><p>📰 ${ev.text}</p></div>
   `;
 }
