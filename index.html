@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gridiron Legacy — Écrivez votre légende du gridiron</title>
+<title>Football Career — Écrivez votre légende</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -31,10 +29,12 @@
   nav{position:sticky; top:0; z-index:50; backdrop-filter:blur(10px); background:rgba(8,28,21,0.72); border-bottom:1px solid var(--line-white);}
   nav .wrap{display:flex; align-items:center; justify-content:space-between; height:60px; padding-left:24px; padding-right:24px;}
   .brand{font-family:'Anton',sans-serif; font-size:1.05rem; letter-spacing:.03em; display:flex; align-items:center; gap:10px;}
-  .brand .ball{width:20px;height:13px;background:var(--jersey-red);border-radius:50%/60%;position:relative;box-shadow:inset 0 0 0 1px rgba(242,237,225,.5);}
-  .brand .ball::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:1.5px;background:var(--chalk);transform:translate(-50%,-50%);}
-  .nav-stat{font-family:var(--mono); font-size:.72rem; color:rgba(242,237,225,.6); letter-spacing:.05em;}
+  .brand .ball{width:18px;height:18px;background:var(--chalk);border-radius:50%;position:relative;box-shadow:inset 0 0 0 1px rgba(6,12,28,.5);}
+  .brand .ball::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;background:var(--turf-dark);clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);transform:translate(-50%,-50%);}
+  .nav-stat{font-family:var(--mono); font-size:.72rem; color:rgba(242,237,225,.6); letter-spacing:.05em; display:flex; align-items:center; gap:14px;}
   .nav-stat b{color:var(--gold);}
+  .nav-link{font-family:var(--mono); font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:rgba(242,237,225,.55); border:1px solid var(--line-white); padding:6px 12px; transition:all .2s;}
+  .nav-link:hover{border-color:var(--gold); color:var(--gold);}
 
   .down-marker{font-family:var(--mono);font-size:.72rem;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:20px;}
   .down-marker::before{content:"";width:30px;height:1px;background:var(--gold);}
@@ -50,19 +50,23 @@
   .cta-ghost{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,237,225,.55);background:transparent;border:1px solid var(--line-white);padding:10px 18px;transition:all .2s;}
   .cta-ghost:hover{border-color:var(--gold); color:var(--gold);}
 
-  .section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:34px;border-bottom:1px solid var(--line-white);padding-bottom:18px;}
+  .section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:34px;border-bottom:1px solid var(--line-white);padding-bottom:18px;flex-wrap:wrap;}
   .section-num{font-family:var(--mono);color:var(--gold);font-size:.8rem;}
   .section-title{font-family:'Anton',sans-serif;font-size:clamp(1.4rem,3.6vw,2.1rem);text-transform:uppercase;}
   .section-sub{margin-top:-16px;margin-bottom:34px;color:rgba(242,237,225,.6);max-width:560px;font-weight:300;font-size:.92rem;}
 
   /* Draft picker */
   .choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line-white);border:1px solid var(--line-white);}
+  .choice-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+  @media(max-width:640px){.choice-grid.cols-3{grid-template-columns:repeat(2,1fr);}}
   .choice-card{background:var(--turf-dark);padding:22px 20px;text-align:left;transition:background .2s ease,border-color .2s;position:relative;}
   .choice-card:hover{background:rgba(216,165,32,.06);}
   .choice-card.selected{background:rgba(216,165,32,.12); box-shadow:inset 0 0 0 1px var(--gold);}
   .choice-card .yard{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:.1em;}
+  .choice-card .flag{font-size:1.3rem;}
   .choice-card h3{font-family:'Anton',sans-serif;font-size:1.05rem;text-transform:uppercase;margin:10px 0 8px;letter-spacing:.01em;}
   .choice-card p{font-size:.78rem;line-height:1.5;color:rgba(242,237,225,.6);font-weight:300;}
+  .choice-card .mods-line{font-family:var(--mono);font-size:.66rem;color:var(--gold);letter-spacing:.03em;margin-top:10px;}
   .step-actions{margin-top:34px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
   .progress-dots{display:flex;gap:8px;}
   .progress-dots span{width:7px;height:7px;border-radius:50%;background:var(--line-white);}
@@ -106,6 +110,35 @@
   .tl-age{font-family:var(--mono);color:var(--gold);font-size:.7rem;letter-spacing:.08em;}
   .tl-item p{font-size:.82rem;color:rgba(242,237,225,.7);font-weight:300;margin-top:4px;line-height:1.5;}
 
+  /* Badges / Palmarès */
+  .badge-cat-head{display:flex;justify-content:space-between;align-items:baseline;margin:36px 0 14px;}
+  .badge-cat-head:first-of-type{margin-top:0;}
+  .badge-cat-title{font-family:'Anton',sans-serif;font-size:1.05rem;text-transform:uppercase;letter-spacing:.02em;}
+  .badge-count{font-family:var(--mono);font-size:.72rem;color:var(--gold);}
+  .badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line-white);border:1px solid var(--line-white);}
+  .badge-card{background:var(--turf-dark);padding:20px 18px;transition:background .2s;}
+  .badge-card:not(.locked):hover{background:rgba(216,165,32,.06);}
+  .badge-card.locked{opacity:.4;}
+  .badge-card .icon{font-size:1.5rem;margin-bottom:8px;display:block;}
+  .badge-card h4{font-family:'Anton',sans-serif;font-size:.9rem;text-transform:uppercase;letter-spacing:.01em;margin-bottom:6px;}
+  .badge-card p{font-size:.75rem;line-height:1.45;color:rgba(242,237,225,.6);font-weight:300;}
+  .badge-card .unlock-meta{margin-top:10px;font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.03em;line-height:1.6;}
+  .badge-card.graal{grid-column:1/-1;text-align:center;padding:36px 20px;}
+  .badge-card.graal .icon{font-size:2.2rem;}
+
+  /* Clubs */
+  .club-level{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold);color:var(--gold);margin-bottom:10px;}
+  .club-salary{font-family:var(--mono);font-size:.7rem;color:rgba(242,237,225,.55);margin-top:8px;}
+
+  /* Decision / mercato events */
+  .event-context{font-size:1rem;line-height:1.65;color:rgba(242,237,225,.85);max-width:640px;margin-bottom:32px;font-weight:300;}
+  .event-choices{display:grid;gap:1px;background:var(--line-white);border:1px solid var(--line-white);}
+  .event-choice{background:var(--turf-dark);padding:20px 22px;text-align:left;transition:background .2s;}
+  .event-choice:hover{background:rgba(216,165,32,.08);}
+  .event-choice .ec-label{font-family:'Anton',sans-serif;font-size:.98rem;text-transform:uppercase;letter-spacing:.01em;}
+  .event-choice .ec-eff{font-family:var(--mono);font-size:.66rem;color:var(--gold);margin-top:8px;display:block;letter-spacing:.03em;}
+  .mercato-card{background:var(--turf-dark);padding:26px 24px;border:1px solid var(--line-white);max-width:520px;}
+
   footer{border-top:1px solid var(--line-white);padding:26px 0;font-size:.72rem;color:rgba(242,237,225,.4);text-align:center;}
   ::selection{background:var(--gold); color:var(--turf-dark);}
   ::-webkit-scrollbar{width:6px;}
@@ -118,7 +151,7 @@
 
 <nav>
   <div class="wrap">
-    <div class="brand"><span class="ball"></span>GRIDIRON LEGACY</div>
+    <div class="brand"><span class="ball"></span>FOOTBALL CAREER</div>
     <div class="nav-stat" id="navStat"></div>
   </div>
 </nav>
@@ -126,9 +159,9 @@
 <!-- SCREEN 0 : HOME -->
 <section class="screen active" id="screen-home">
   <div class="wrap">
-    <div class="down-marker">1ST &amp; GOAL</div>
-    <h1 class="title">Écrivez votre <span class="accent">légende</span> du gridiron</h1>
-    <p class="tagline">De 16 ans à la retraite, incarnez un joueur de football américain. Chaque saison, chaque choix compte. Personne ne connaît son destin avant le coup d'envoi.</p>
+    <div class="down-marker">COUP D'ENVOI</div>
+    <h1 class="title">Écrivez votre <span class="accent">légende</span> du football</h1>
+    <p class="tagline">De 16 ans à la retraite, incarnez un footballeur. Chaque saison, chaque choix, chaque transfert compte. Personne ne connaît son destin avant le coup d'envoi.</p>
     <div class="cta-row">
       <button class="cta-primary" onclick="startNewCareer()">Commencer ma carrière →</button>
       <button class="cta-secondary" id="continueBtn" style="display:none" onclick="resumeCareer()">Reprendre ma carrière</button>
@@ -155,14 +188,30 @@
   </div>
 </section>
 
+<!-- SCREEN 1.5 : CLUBS REPÉRAGE -->
+<section class="screen" id="screen-clubs">
+  <div class="wrap">
+    <div class="down-marker">REPÉRAGE</div>
+    <div class="section-head" style="border:none; padding-bottom:0; margin-bottom:10px;">
+      <span class="section-title">Les clubs vous ont repéré</span>
+    </div>
+    <p class="section-sub">Plusieurs clubs vous proposent de rejoindre leur effectif. Choisissez le premier chapitre de votre carrière.</p>
+    <div class="choice-grid" id="clubsGrid"></div>
+    <div class="step-actions">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</section>
+
 <!-- SCREEN 2 : DRAFTED -->
 <section class="screen" id="screen-drafted">
   <div class="wrap" style="text-align:center; padding-top:60px;">
-    <div class="down-marker" style="justify-content:center;">DRAFT</div>
-    <h1 class="title" style="font-size:clamp(1.8rem,6vw,3rem);">Les franchises<br>vous ont <span class="accent">repéré</span></h1>
+    <div class="down-marker" style="justify-content:center;">SIGNATURE</div>
+    <h1 class="title" style="font-size:clamp(1.8rem,6vw,3rem);">Un club vous a <span class="accent">signé</span></h1>
     <p class="tagline" style="margin-left:auto;margin-right:auto;" id="draftedText"></p>
     <div class="cta-row" style="justify-content:center; margin-top:44px;">
-      <button class="cta-primary" onclick="enterDashboard()">Entrer dans la ligue →</button>
+      <button class="cta-primary" onclick="enterDashboard()">Entrer dans la carrière →</button>
     </div>
   </div>
 </section>
@@ -181,7 +230,7 @@
           <div class="id-num" id="idNum">—</div>
           <div class="id-meta">
             <h2 id="idPos">Poste</h2>
-            <div class="sub" id="idSub">NATIONALITÉ · ÉQUIPE</div>
+            <div class="sub" id="idSub">NATIONALITÉ · CLUB</div>
           </div>
         </div>
         <div class="bar-row">
@@ -209,7 +258,49 @@
 
     <div class="cta-row" style="margin-top:34px;">
       <button class="cta-primary" id="playSeasonBtn" onclick="playSeason()">Jouer la saison →</button>
+      <button class="cta-secondary" onclick="openBadges('screen-dash')">Voir le Palmarès</button>
       <button class="cta-secondary" id="retireBtn" onclick="retireNow()">Prendre ma retraite</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN 3.5 : DECISION EVENT -->
+<section class="screen" id="screen-decision">
+  <div class="wrap">
+    <div class="down-marker">MOMENT DÉCISIF</div>
+    <div class="section-head" style="border:none; padding-bottom:0; margin-bottom:20px;">
+      <span class="section-title">Un choix s'impose</span>
+    </div>
+    <p class="event-context" id="decisionContext"></p>
+    <div class="event-choices" id="decisionChoices"></div>
+  </div>
+</section>
+
+<!-- SCREEN 3.6 : MERCATO -->
+<section class="screen" id="screen-mercato">
+  <div class="wrap">
+    <div class="down-marker">MERCATO</div>
+    <div class="section-head" style="border:none; padding-bottom:0; margin-bottom:20px;">
+      <span class="section-title">Une offre de transfert</span>
+    </div>
+    <p class="event-context" id="mercatoIntro"></p>
+    <div class="mercato-card" id="mercatoCard"></div>
+    <div class="cta-row">
+      <button class="cta-primary" id="mercatoLeaveBtn">Accepter le transfert →</button>
+      <button class="cta-secondary" id="mercatoStayBtn">Rester au club</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN 3.7 : BADGES / PALMARÈS -->
+<section class="screen" id="screen-badges">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-title">Palmarès</span>
+    </div>
+    <div id="badgesContent"></div>
+    <div class="cta-row">
+      <button class="cta-ghost" id="badgesBackBtn" onclick="closeBadges()">← Retour</button>
     </div>
   </div>
 </section>
@@ -223,7 +314,7 @@
 
     <div class="dash-grid" style="margin-top:50px;">
       <div class="dash-card">
-        <div class="section-title" style="font-size:1.1rem; margin-bottom:18px;">Palmarès</div>
+        <div class="section-title" style="font-size:1.1rem; margin-bottom:18px;">Trophées</div>
         <div class="achv-grid" id="finalAchv"></div>
         <div class="stat-grid" style="margin-top:22px;">
           <div class="stat-box"><div class="label">Overall final</div><div class="value gold" id="finalOverall">—</div></div>
@@ -240,64 +331,208 @@
 
     <div class="cta-row" style="justify-content:center; margin-top:44px;">
       <button class="cta-primary" onclick="startNewCareer()">Nouvelle carrière →</button>
+      <button class="cta-secondary" onclick="openBadges('screen-retired')">Voir le Palmarès</button>
     </div>
   </div>
 </section>
 
-<footer>GRIDIRON LEGACY — jeu de carrière, gratuit, dans votre navigateur. Progression sauvegardée automatiquement sur cet appareil.</footer>
+<footer>FOOTBALL CAREER — jeu de carrière, gratuit, dans votre navigateur. Progression sauvegardée automatiquement sur cet appareil.</footer>
 
 <script>
 /* ---------------------------------------------------------
    DATA
 --------------------------------------------------------- */
 const NATIONALITIES = [
-  {k:"usa", label:"États-Unis", d:"Le berceau du gridiron. Concurrence féroce dès le lycée."},
-  {k:"can", label:"Canada", d:"Solide culture physique, moins de projecteurs médiatiques."},
-  {k:"fra", label:"France", d:"Un chemin atypique, loin des radars des recruteurs américains."},
-  {k:"ger", label:"Allemagne", d:"Une ligue locale en pleine croissance, championne d'Europe."},
-  {k:"mex", label:"Mexique", d:"Une passion grandissante et un vivier de plus en plus scouté."},
-  {k:"jpn", label:"Japon", d:"Discipline extrême, championnat X-League réputé."}
+  {k:"fra", label:"France", flag:"🇫🇷", d:"Un vivier de talents reconnu, formation exigeante."},
+  {k:"ger", label:"Allemagne", flag:"🇩🇪", d:"Rigueur tactique et centres de formation réputés."},
+  {k:"esp", label:"Espagne", flag:"🇪🇸", d:"Le pays du jeu technique, académies prestigieuses."},
+  {k:"ita", label:"Italie", flag:"🇮🇹", d:"Culture défensive forte, exigence tactique immédiate."},
+  {k:"eng", label:"Angleterre", flag:"🏴", d:"Un football physique, sous les projecteurs dès le plus jeune âge."},
+  {k:"bra", label:"Brésil", flag:"🇧🇷", d:"Créativité et rue, un vivier inépuisable de talents."},
+  {k:"arg", label:"Argentine", flag:"🇦🇷", d:"Passion débordante, concurrence redoutable dès les jeunes."},
+  {k:"ned", label:"Pays-Bas", flag:"🇳🇱", d:"Formation technique de pointe, exportation massive de talents."},
+  {k:"por", label:"Portugal", flag:"🇵🇹", d:"Petit pays, grand vivier, tremplin vers les grands championnats."},
+  {k:"bel", label:"Belgique", flag:"🇧🇪", d:"Une génération dorée qui inspire toute une jeunesse."},
+  {k:"cro", label:"Croatie", flag:"🇭🇷", d:"Mentalité de guerrier, formation rigoureuse."},
+  {k:"uru", label:"Uruguay", flag:"🇺🇾", d:"Petit pays, grand caractère, exportation précoce."},
+  {k:"mar", label:"Maroc", flag:"🇲🇦", d:"Une nation en plein essor, académies en pleine croissance."},
+  {k:"mex", label:"Mexique", flag:"🇲🇽", d:"Une passion immense et un championnat local compétitif."},
+  {k:"col", label:"Colombie", flag:"🇨🇴", d:"Talent brut et créativité, formation parfois précaire."},
+  {k:"sui", label:"Suisse", flag:"🇨🇭", d:"Structures solides, moins de projecteurs médiatiques."},
+  {k:"sen", label:"Sénégal", flag:"🇸🇳", d:"Physiques puissants, académies tournées vers l'Europe."},
+  {k:"tur", label:"Turquie", flag:"🇹🇷", d:"Ferveur populaire immense, championnat exigeant."},
+  {k:"cmr", label:"Cameroun", flag:"🇨🇲", d:"Tradition de lions indomptables, parcours semé d'embûches."},
+  {k:"civ", label:"Côte d'Ivoire", flag:"🇨🇮", d:"Vivier historique de talents offensifs."},
+  {k:"dza", label:"Algérie", flag:"🇩🇿", d:"Ferveur populaire et double culture, deux voies possibles."},
+  {k:"tun", label:"Tunisie", flag:"🇹🇳", d:"Formation rigoureuse, tremplin vers l'Europe."},
+  {k:"nor", label:"Norvège", flag:"🇳🇴", d:"Physiques athlétiques, championnat en progression."},
+  {k:"cod", label:"RDC", flag:"🇨🇩", d:"Un potentiel énorme, infrastructures encore limitées."},
+  {k:"gin", label:"Guinée", flag:"🇬🇳", d:"Talent brut, exil précoce vers de meilleures structures."},
+  {k:"ben", label:"Bénin", flag:"🇧🇯", d:"Une scène naissante, chaque parcours est un pari."},
+  {k:"jpn", label:"Japon", flag:"🇯🇵", d:"Discipline extrême, championnat J-League réputé."}
 ];
 const POSITIONS = [
-  {k:"QB", label:"Quarterback", d:"Le cerveau de l'attaque. Sous les projecteurs à chaque snap.", stat:"Yards de passe"},
-  {k:"RB", label:"Running Back", d:"Puissance et vista entre les lignes.", stat:"Yards au sol"},
-  {k:"WR", label:"Wide Receiver", d:"Vitesse et mains sûres en un éclair.", stat:"Yards de réception"},
-  {k:"TE", label:"Tight End", d:"Polyvalent, entre ligne offensive et receveur.", stat:"Réceptions"},
-  {k:"LB", label:"Linebacker", d:"Le mur défensif, lecture du jeu instantanée.", stat:"Tacles"},
-  {k:"CB", label:"Cornerback", d:"Duel permanent face aux receveurs adverses.", stat:"Interceptions"},
-  {k:"S", label:"Safety", d:"Dernier rempart, vision globale du terrain.", stat:"Tacles"},
-  {k:"K", label:"Kicker", d:"Le sang-froid dans les moments décisifs.", stat:"Field Goals"}
+  {k:"GB", label:"Gardien de but", d:"Le dernier rempart. Chaque erreur se paie cash.", stat:"Arrêts"},
+  {k:"DC", label:"Défenseur central", d:"Le roc de la défense, lecture du jeu et duels aériens.", stat:"Tacles"},
+  {k:"LAT", label:"Latéral", d:"Couloir entier à couvrir, va-et-vient permanent.", stat:"Centres réussis"},
+  {k:"MDF", label:"Milieu défensif", d:"L'écran devant la défense, récupération et relance.", stat:"Interceptions"},
+  {k:"MOC", label:"Milieu offensif", d:"Le chef d'orchestre entre les lignes.", stat:"Passes décisives"},
+  {k:"AIL", label:"Ailier", d:"Vitesse et dribbles pour déséquilibrer les défenses.", stat:"Dribbles réussis"},
+  {k:"ATT", label:"Attaquant", d:"Le finisseur, seul juge de son efficacité : le but.", stat:"Buts"}
 ];
 const ORIGINS = [
-  {k:"metropole", label:"Métropole", d:"Grandi dans une grande ville, entouré de talents concurrents."},
-  {k:"campagne", label:"Campagne", d:"Formé loin des grands centres, mentalité de travailleur."},
-  {k:"famille_sportive", label:"Famille sportive", d:"Un parent ancien athlète, du réseau dès le départ."},
-  {k:"quartier_populaire", label:"Quartier populaire", d:"Une ascension à la force du mental."}
+  {k:"metropole", label:"Métropole", d:"Grandi dans une grande ville, entouré de talents concurrents.", mods:{tech:2, rep:1}},
+  {k:"campagne", label:"Campagne", d:"Formé loin des grands centres, mentalité de travailleur.", mods:{phys:3, ment:1}},
+  {k:"famille_sportive", label:"Famille sportive", d:"Un parent ancien athlète, du réseau dès le départ.", mods:{tech:2, rep:3}},
+  {k:"quartier_populaire", label:"Quartier populaire", d:"Une ascension à la force du mental.", mods:{ment:3, cha:2}}
 ];
 const TEENS = [
-  {k:"academie", label:"Académie sportive", d:"Encadrement pro dès le lycée, discipline stricte."},
-  {k:"lycee_public", label:"Lycée public", d:"Un parcours plus libre, moins encadré."},
-  {k:"autodidacte", label:"Autodidacte", d:"Vidéos, terrain de quartier, obstination pure."}
+  {k:"centre_formation", label:"Centre de formation", d:"Encadrement pro dès l'adolescence, discipline stricte.", mods:{tech:4, ment:1}},
+  {k:"etudes_classiques", label:"Études classiques", d:"Un parcours plus libre, moins encadré sur le terrain.", mods:{ment:2, rep:1}},
+  {k:"autodidacte", label:"Autodidacte", d:"Terrain vague, vidéos, obstination pure.", mods:{phys:2, cha:3}}
 ];
 const ENTOURAGE = [
-  {k:"agent_pro", label:"Agent expérimenté", d:"Négociateur redoutable, mais commission élevée."},
-  {k:"famille", label:"Géré par la famille", d:"Confiance totale, mais moins de réseau."},
-  {k:"solo", label:"En solo", d:"Toutes les décisions vous appartiennent."}
+  {k:"agent_pro", label:"Agent expérimenté", d:"Négociateur redoutable, mais commission élevée.", mods:{rep:3}, salaryBoost:0.15},
+  {k:"famille", label:"Géré par la famille", d:"Confiance totale, mais moins de réseau.", mods:{ment:2}, salaryBoost:0},
+  {k:"solo", label:"En solo", d:"Toutes les décisions vous appartiennent.", mods:{cha:2}, salaryBoost:0}
 ];
-const TEAMS = ["Wolves de Chicago","Sentinels de Dallas","Ironclads de Boston","Comets de Miami","Titans de Seattle","Rangers de Denver","Falcons de Phoenix","Vipers de Detroit"];
 
-const STORAGE_KEY = "gridiron_legacy_save_v1";
+const LEVEL_SALARY = {
+  "Régional":[8,18], "National":[20,45], "Division 2":[50,120],
+  "Division 1":[150,450], "Élite européenne":[500,1500]
+};
+const LOCAL_PREFIXES = ["AS","FC","Racing Club","Olympique","US","Real","Sporting","Étoile","Union"];
+const GENERIC_CLUBS = [
+  {name:"Real Fuego", level:"Division 1", country:"Espagne"},
+  {name:"AC Tempête", level:"Division 1", country:"Italie"},
+  {name:"Dynamo Nord", level:"Division 2", country:"Belgique"},
+  {name:"FC Horizon", level:"National", country:"Suisse"},
+  {name:"Étoile du Sud", level:"Régional", country:"France"},
+  {name:"Sporting Aurora", level:"Élite européenne", country:"Portugal"},
+  {name:"Union Continentale", level:"Division 1", country:"Pays-Bas"},
+  {name:"Atlas FC", level:"Division 2", country:"Maroc"},
+  {name:"River Nova", level:"Division 1", country:"Argentine"},
+  {name:"Lions de l'Atlantique", level:"National", country:"Sénégal"},
+  {name:"Panthères Noires", level:"Division 2", country:"Cameroun"},
+  {name:"Vikings FC", level:"Élite européenne", country:"Norvège"},
+  {name:"Sparta Faucon", level:"Division 1", country:"Croatie"},
+  {name:"Celta Marée", level:"National", country:"Uruguay"}
+];
+
+const STORAGE_KEY = "football_career_save_v1";
 
 let state = null;
 let draftStep = 0;
+let lastScreenBeforeBadges = 'screen-dash';
+let pendingSeasonEvents = null; // {mercatoDone, decisionDone}
 const draftFields = [
-  {key:"nationality", list:NATIONALITIES, title:"Votre nationalité", sub:"Le pays qui vous verra grandir sur les terrains."},
-  {key:"position", list:POSITIONS, title:"Votre poste", sub:"Il façonnera vos statistiques, vos événements et votre légende."},
-  {key:"origin", list:ORIGINS, title:"Votre origine", sub:"D'où venez-vous, avant les projecteurs ?"},
-  {key:"teen", list:TEENS, title:"Votre adolescence", sub:"Le mode de vie qui forgera votre discipline… et votre réputation."},
-  {key:"entourage", list:ENTOURAGE, title:"Votre entourage", sub:"Qui gère vos intérêts avant même votre premier contrat ?"}
+  {key:"nationality", list:NATIONALITIES, title:"Votre nationalité", sub:"Le pays qui vous verra grandir sur les terrains.", cols3:true},
+  {key:"position", list:POSITIONS, title:"Votre poste", sub:"Il façonnera vos statistiques, vos événements et votre légende.", cols3:false},
+  {key:"origin", list:ORIGINS, title:"Votre origine", sub:"D'où venez-vous, avant les projecteurs ?", cols3:false},
+  {key:"teen", list:TEENS, title:"Votre adolescence", sub:"Le mode de vie qui forgera votre discipline… et votre réputation.", cols3:false},
+  {key:"entourage", list:ENTOURAGE, title:"Votre entourage", sub:"Qui gère vos intérêts avant même votre premier contrat ?", cols3:false}
 ];
 let draftPicks = {};
+
+/* ---------------------------------------------------------
+   BADGES (Palmarès)
+--------------------------------------------------------- */
+const BADGE_DEFS = {
+  secrets: {
+    title:"Secrets",
+    list:[
+      {k:'renaissance', name:'Renaissance', icon:'🔥', desc:"Retomber sous 45 d'overall puis remonter au-dessus de 75.", check:s=>s._hitLow && s.overall>=75},
+      {k:'miracule', name:'Miraculé', icon:'⛑️', desc:"Subir une grosse baisse de forme (sous 15) puis rejouer une saison à plus de 70 de forme.", check:s=>s._hadInjury && s.form>=70},
+      {k:'cuillere', name:'La Cuillère', icon:'🥄', desc:"Terminer une saison avec un overall sous 40 après au moins 3 saisons pro.", check:s=>s.proSeasons>=3 && s.overall<40},
+      {k:'ennemi_public', name:'Ennemi public', icon:'😠', desc:"Avoir un moral sous 20 pendant deux saisons d'affilée.", check:s=>s._lowMoraleStreak>=2}
+    ]
+  },
+  parcours: {
+    title:"Parcours & Fidélité",
+    list:[
+      {k:'legende_vivante', name:'Légende vivante', icon:'🏆', desc:"Cumuler 15 saisons professionnelles.", check:s=>s.proSeasons>=15},
+      {k:'un_club', name:'Une vie, un club', icon:'❤️', desc:"Prendre sa retraite sans jamais avoir été transféré.", check:s=>s.retired && s.transfersCount===0, retireOnly:true},
+      {k:'globe_trotter', name:'Globe-trotter', icon:'🌍', desc:"Jouer dans au moins 4 pays différents.", check:s=>s.countriesPlayed.length>=4},
+      {k:'voyageur', name:'Voyageur assidu', icon:'✈️', desc:"Accepter au moins 5 transferts.", check:s=>s.transfersCount>=5},
+      {k:'nabab', name:'Nabab', icon:'💰', desc:"Atteindre un salaire annuel de 800 k$ ou plus.", check:s=>s.salary>=800000},
+      {k:'nemesis', name:'Némésis', icon:'⚔️', desc:"Voir son overall progresser 5 saisons de suite.", check:s=>s._growStreak>=5},
+      {k:'idole', name:'Idole des foules', icon:'🎉', desc:"Cumuler 5 saisons avec un moral supérieur à 85.", check:s=>s._highMoraleCount>=5},
+      {k:'habitue', name:"L'Habitué", icon:'📍', desc:"Rester 8 saisons consécutives dans le même club.", check:s=>s.sameClubStreak>=8}
+    ]
+  },
+  graal: {
+    title:"Le Graal",
+    list:[
+      {k:'palmares_absolu', name:'Palmarès Absolu', icon:'👑', desc:"Débloquer tous les badges Secrets et Parcours & Fidélité.", graal:true,
+        check:s=>{
+          const all = [...BADGE_DEFS.secrets.list, ...BADGE_DEFS.parcours.list];
+          return all.every(b=>s.badges[b.k]);
+        }}
+    ]
+  }
+};
+
+function unlockMeta(state, playerLine){
+  return `${playerLine} · ${posLabel(state.position)} · ${natLabel(state.nationality)} · ${state.age} ans`;
+}
+
+function checkBadges(){
+  ['secrets','parcours'].forEach(catKey=>{
+    BADGE_DEFS[catKey].list.forEach(b=>{
+      if(!state.badges[b.k] && b.check(state)){
+        state.badges[b.k] = {age:state.age, position:state.position, nationality:state.nationality, proSeasons:state.proSeasons};
+      }
+    });
+  });
+  // Graal checked last, after secrets/parcours of this season
+  BADGE_DEFS.graal.list.forEach(b=>{
+    if(!state.badges[b.k] && b.check(state)){
+      state.badges[b.k] = {age:state.age, position:state.position, nationality:state.nationality, proSeasons:state.proSeasons};
+    }
+  });
+}
+
+function openBadges(fromScreen){
+  lastScreenBeforeBadges = fromScreen || 'screen-dash';
+  renderBadges();
+  showScreen('screen-badges');
+}
+function closeBadges(){
+  showScreen(lastScreenBeforeBadges);
+  updateNavStat();
+}
+function renderBadges(){
+  const el = document.getElementById('badgesContent');
+  let html = '';
+  ['secrets','parcours'].forEach(catKey=>{
+    const cat = BADGE_DEFS[catKey];
+    const unlockedCount = cat.list.filter(b=>state.badges[b.k]).length;
+    html += `<div class="badge-cat-head"><span class="badge-cat-title">${cat.title}</span><span class="badge-count">${unlockedCount}/${cat.list.length}</span></div>`;
+    html += `<div class="badge-grid">`;
+    cat.list.forEach(b=>{
+      const info = state.badges[b.k];
+      if(info){
+        html += `<div class="badge-card"><span class="icon">${b.icon}</span><h4>${b.name}</h4><p>${b.desc}</p>
+          <div class="unlock-meta">Débloqué par ${posLabel(info.position)} · ${natLabel(info.nationality)}<br>à ${info.age} ans · ${info.proSeasons} saisons pro</div></div>`;
+      } else {
+        html += `<div class="badge-card locked"><span class="icon">🔒</span><h4>${b.name}</h4><p>${b.desc}</p></div>`;
+      }
+    });
+    html += `</div>`;
+  });
+  const graal = BADGE_DEFS.graal.list[0];
+  const graalInfo = state.badges[graal.k];
+  html += `<div class="badge-cat-head"><span class="badge-cat-title">${BADGE_DEFS.graal.title}</span><span class="badge-count">${graalInfo?'1':'0'}/1</span></div>`;
+  html += `<div class="badge-grid">`;
+  if(graalInfo){
+    html += `<div class="badge-card graal"><span class="icon">${graal.icon}</span><h4>${graal.name}</h4><p>${graal.desc}</p>
+      <div class="unlock-meta">Débloqué par ${posLabel(graalInfo.position)} · ${natLabel(graalInfo.nationality)}<br>à ${graalInfo.age} ans · ${graalInfo.proSeasons} saisons pro</div></div>`;
+  } else {
+    html += `<div class="badge-card graal locked"><span class="icon">🔒</span><h4>${graal.name}</h4><p>${graal.desc}</p></div>`;
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+}
 
 /* ---------------------------------------------------------
    UTIL
@@ -315,11 +550,16 @@ function showScreen(id){
 function updateNavStat(){
   const nav = document.getElementById('navStat');
   if(state && !state.retired){
-    nav.innerHTML = `<b>${state.age} ANS</b> · ${posLabel(state.position)} · OVR <b>${state.overall}</b>`;
+    nav.innerHTML = `<b>${state.age} ANS</b> · ${posLabel(state.position)} · OVR <b>${state.overall}</b> <button class="nav-link" onclick="openBadges('screen-dash')">Palmarès</button>`;
   } else { nav.innerHTML = ''; }
 }
 function posLabel(k){ const p = POSITIONS.find(p=>p.k===k); return p?p.label:k; }
 function natLabel(k){ const n = NATIONALITIES.find(n=>n.k===k); return n?n.label:k; }
+function fmtSalary(v){ return Math.round(v/1000) + ' k$'; }
+function modsLine(mods){
+  const names = {tech:'TECH', phys:'PHYS', ment:'MENT', cha:'CHA', rep:'RÉP'};
+  return Object.entries(mods||{}).map(([k,v])=>`${names[k]||k.toUpperCase()} +${v}`).join(' · ');
+}
 
 /* ---------------------------------------------------------
    BOOT
@@ -354,11 +594,17 @@ function renderDraftStep(){
   document.getElementById('draftTitle').textContent = f.title;
   document.getElementById('draftSub').textContent = f.sub;
   const grid = document.getElementById('draftGrid');
+  grid.className = 'choice-grid' + (f.cols3 ? ' cols-3' : '');
   grid.innerHTML = '';
   f.list.forEach(item=>{
     const card = document.createElement('button');
     card.className = 'choice-card' + (draftPicks[f.key]===item.k ? ' selected':'');
-    card.innerHTML = `<div class="yard">—</div><h3>${item.label}</h3><p>${item.d}</p>`;
+    let inner = '';
+    if(item.flag){ inner += `<div class="flag">${item.flag}</div>`; }
+    else { inner += `<div class="yard">—</div>`; }
+    inner += `<h3>${item.label}</h3><p>${item.d}</p>`;
+    if(item.mods){ inner += `<div class="mods-line">${modsLine(item.mods)}</div>`; }
+    card.innerHTML = inner;
     card.onclick = ()=>{ draftPicks[f.key]=item.k; renderDraftStep(); };
     grid.appendChild(card);
   });
@@ -381,6 +627,10 @@ function prevStep(){
 }
 function finishDraft(){
   const pos = POSITIONS.find(p=>p.k===draftPicks.position);
+  const originDef = ORIGINS.find(o=>o.k===draftPicks.origin);
+  const teenDef = TEENS.find(t=>t.k===draftPicks.teen);
+  const entourageDef = ENTOURAGE.find(e=>e.k===draftPicks.entourage);
+
   state = {
     nationality: draftPicks.nationality,
     position: draftPicks.position,
@@ -389,35 +639,98 @@ function finishDraft(){
     entourage: draftPicks.entourage,
     age: 16,
     team: null,
+    division: null,
+    clubCountry: null,
     salary: 0,
     overall: rnd(38,52),
     primaryStat: 0,
     form: rnd(55,75),
     morale: rnd(60,80),
+    subStats: {tech:0, phys:0, ment:0, cha:0, rep:0},
     proSeasons: 0,
     achievements: [],
+    badges: {},
     history: [],
-    retired: false
+    retired: false,
+    clubsHistory: [],
+    transfersCount: 0,
+    sameClubStreak: 0,
+    countriesPlayed: [],
+    salaryBoost: entourageDef.salaryBoost || 0,
+    _hitLow:false, _hadInjury:false, _lowMoraleStreak:0, _growStreak:0, _highMoraleCount:0, _lastOverall:null
   };
-  // Origin/teen/entourage small modifiers
-  if(state.origin==="famille_sportive") state.overall += 4;
-  if(state.origin==="quartier_populaire") state.morale += 5;
-  if(state.teen==="academie") state.overall += 3;
-  if(state.teen==="autodidacte") state.form += 5;
-  if(state.entourage==="agent_pro") state.salaryBoost = 0.15;
-  else state.salaryBoost = 0;
 
-  state.history.push({age:16, text:`Débuts en ${natLabel(state.nationality)} au poste de ${pos.label}. Formation : ${TEENS.find(t=>t.k===state.teen).label}.`});
+  // apply mods from origin / teen / entourage
+  [originDef.mods, teenDef.mods, entourageDef.mods].forEach(mods=>{
+    if(!mods) return;
+    Object.entries(mods).forEach(([k,v])=>{ state.subStats[k] = (state.subStats[k]||0) + v; });
+  });
+  const modSum = Object.values(state.subStats).reduce((a,b)=>a+b,0);
+  state.overall = clamp(state.overall + Math.round(modSum*0.5), 30, 70);
+
+  state.history.push({age:16, text:`Débuts en ${natLabel(state.nationality)} au poste de ${pos.label}. Formation : ${teenDef.label}.`});
   save();
 
-  state.team = pick(TEAMS);
-  document.getElementById('draftedText').textContent =
-    `Après plusieurs saisons prometteuses en lycée puis en université, les ${state.team} vous sélectionnent en draft. Votre carrière professionnelle commence maintenant.`;
+  goToClubs();
+}
+
+/* ---------------------------------------------------------
+   CLUBS / REPÉRAGE
+--------------------------------------------------------- */
+function generateClubOffers(){
+  const localName = `${pick(LOCAL_PREFIXES)} ${natLabel(state.nationality)}`;
+  const localLevels = ["Régional","National"];
+  const localLevel = pick(localLevels);
+  const localSalaryRange = LEVEL_SALARY[localLevel];
+  const local = {
+    name: localName, level: localLevel, country: natLabel(state.nationality),
+    salary: rnd(localSalaryRange[0], localSalaryRange[1]) * 1000,
+    desc: "Un club formateur, proche de chez vous. Idéal pour progresser sans pression."
+  };
+  const shuffled = GENERIC_CLUBS.slice().sort(()=>Math.random()-0.5).slice(0,3).map(c=>{
+    const range = LEVEL_SALARY[c.level];
+    return {...c, salary: rnd(range[0], range[1]) * 1000, desc: clubDesc(c.level)};
+  });
+  return [local, ...shuffled];
+}
+function clubDesc(level){
+  const map = {
+    "Régional":"Un club modeste, mais un vrai tremplin pour se faire remarquer.",
+    "National":"Un championnat sérieux, la concurrence commence à monter.",
+    "Division 2":"Un club ambitieux qui vise la montée.",
+    "Division 1":"L'élite nationale, chaque match compte double.",
+    "Élite européenne":"Un cador continental, la pression sera immense."
+  };
+  return map[level] || "Un club prêt à vous faire confiance.";
+}
+function goToClubs(){
+  const offers = generateClubOffers();
+  const grid = document.getElementById('clubsGrid');
+  grid.innerHTML = '';
+  offers.forEach(c=>{
+    const card = document.createElement('button');
+    card.className = 'choice-card';
+    card.innerHTML = `<div class="club-level">${c.level}</div><h3>${c.name}</h3><p>${c.desc}</p><div class="club-salary">${fmtSalary(c.salary)} / an</div>`;
+    card.onclick = ()=>confirmClub(c);
+    grid.appendChild(card);
+  });
+  showScreen('screen-clubs');
+}
+function confirmClub(club){
+  state.team = club.name;
+  state.division = club.level;
+  state.clubCountry = club.country;
+  state.salary = club.salary;
+  state.clubsHistory.push(club.name);
+  if(!state.countriesPlayed.includes(club.country)) state.countriesPlayed.push(club.country);
+  state.sameClubStreak = 0;
   state.age = 22;
   state.proSeasons = 0;
-  state.salary = rnd(45,90)*1000;
-  state.history.push({age:22, text:`Draft : signature avec les ${state.team}.`});
+  state.history.push({age:22, text:`Signature avec ${state.team} (${state.division}).`});
   save();
+
+  document.getElementById('draftedText').textContent =
+    `Après plusieurs saisons prometteuses en formation, ${state.team} vous fait signer votre premier contrat professionnel. Votre carrière commence maintenant.`;
   showScreen('screen-drafted');
 }
 function enterDashboard(){
@@ -431,7 +744,7 @@ function enterDashboard(){
 function renderDashboard(){
   updateNavStat();
   document.getElementById('dashAge').textContent = `${state.age} ANS`;
-  document.getElementById('dashStatus').textContent = state.proSeasons===0 ? "Rookie saison" : `${state.proSeasons}ᵉ saison pro`;
+  document.getElementById('dashStatus').textContent = state.proSeasons===0 ? "Saison recrue" : `${state.proSeasons}ᵉ saison pro`;
   document.getElementById('idNum').textContent = '#' + rnd(1,99);
   document.getElementById('idPos').textContent = posLabel(state.position);
   document.getElementById('idSub').textContent = `${natLabel(state.nationality).toUpperCase()} · ${state.team.toUpperCase()}`;
@@ -442,7 +755,7 @@ function renderDashboard(){
   document.getElementById('moraleBar').style.width = state.morale + '%';
   document.getElementById('moraleBar').className = 'bar-fill' + (state.morale<40?' bad':'');
   document.getElementById('statOverall').textContent = state.overall;
-  document.getElementById('statSalary').textContent = Math.round(state.salary/1000) + ' k$';
+  document.getElementById('statSalary').textContent = fmtSalary(state.salary);
   document.getElementById('statPrimaryLabel').textContent = POSITIONS.find(p=>p.k===state.position).stat;
   document.getElementById('statPrimary').textContent = state.primaryStat;
   document.getElementById('statSeasons').textContent = state.proSeasons;
@@ -457,12 +770,154 @@ function renderDashboard(){
 }
 
 /* ---------------------------------------------------------
+   DECISION EVENTS (choix en cours de saison)
+--------------------------------------------------------- */
+const DECISION_EVENTS = [
+  {
+    context:"Avant un match capital, un jeune coéquipier doute visiblement de lui dans le vestiaire.",
+    choices:[
+      {label:"Le rassurer sincèrement", effects:{morale:6, ment:2}, result:"Vous prenez le temps de le rassurer, l'ambiance du vestiaire s'en trouve renforcée."},
+      {label:"Rester concentré sur vous-même", effects:{form:3, rep:-3}, result:"Vous restez focalisé sur votre propre préparation, certains vous trouvent distant."}
+    ]
+  },
+  {
+    context:"Vous ressentez une petite gêne musculaire à quelques jours d'un match important.",
+    choices:[
+      {label:"Jouer malgré la douleur", effects:{form:-10, rep:4}, result:"Vous serrez les dents et jouez. Votre abnégation est saluée, mais votre corps encaisse."},
+      {label:"Vous ménager et déclarer forfait", effects:{form:6, rep:-2}, result:"Vous préférez la prudence. Le staff médical apprécie, la presse s'interroge."}
+    ]
+  },
+  {
+    context:"Le coach vous propose le brassard de capitaine pour la saison à venir.",
+    choices:[
+      {label:"Accepter le brassard", effects:{rep:5, morale:4, ment:2}, result:"Vous endossez le rôle de leader, le vestiaire vous suit."},
+      {label:"Décliner poliment", effects:{morale:2}, result:"Vous préférez rester concentré sur votre propre jeu, sans pression supplémentaire."}
+    ]
+  },
+  {
+    context:"Une tension éclate à l'entraînement avec un coéquipier après un tacle appuyé.",
+    choices:[
+      {label:"Aller crever l'abcès en privé", effects:{morale:5, cha:2}, result:"La discussion apaise les tensions, le groupe reste soudé."},
+      {label:"Ignorer et passer à autre chose", effects:{form:2, morale:-3}, result:"Vous évitez le conflit, mais une gêne persiste dans le vestiaire."}
+    ]
+  },
+  {
+    context:"Un média national vous sollicite pour une interview après une série de bonnes performances.",
+    choices:[
+      {label:"Jouer le jeu médiatique", effects:{rep:5, cha:2}, result:"Votre image grandit, les sponsors commencent à s'intéresser à vous."},
+      {label:"Rester discret", effects:{form:3}, result:"Vous préférez laisser parler le terrain plutôt que les médias."}
+    ]
+  },
+  {
+    context:"Une marque sportive vous propose un contrat de sponsoring personnel.",
+    choices:[
+      {label:"Signer le contrat", effects:{salaryMult:1.08, cha:1}, result:"Vos revenus augmentent, votre image se professionnalise."},
+      {label:"Refuser pour rester concentré", effects:{form:3, ment:1}, result:"Vous préférez éviter toute distraction extra-sportive."}
+    ]
+  }
+];
+
+function beginSeasonFlow(){
+  pendingSeasonEvents = {mercatoDone:false, decisionDone:false};
+  maybeMercato();
+}
+function maybeMercato(){
+  const chance = state.proSeasons>=2 ? 0.32 : 0;
+  if(!state.retired && Math.random() < chance){
+    showMercatoOffer();
+  } else {
+    pendingSeasonEvents.mercatoDone = true;
+    maybeDecision();
+  }
+}
+function maybeDecision(){
+  if(Math.random() < 0.7){
+    showDecisionEvent();
+  } else {
+    pendingSeasonEvents.decisionDone = true;
+    finalizeSeason();
+  }
+}
+
+function showMercatoOffer(){
+  const pool = GENERIC_CLUBS.filter(c=>c.name !== state.team);
+  const club = pick(pool.length ? pool : GENERIC_CLUBS);
+  const range = LEVEL_SALARY[club.level];
+  const salary = rnd(range[0], range[1]) * 1000;
+  const fee = Math.round(state.salary * rnd(2,5) / 10) * 1000 || rnd(50,300)*1000;
+  document.getElementById('mercatoIntro').textContent =
+    `${club.name} (${club.level}, ${club.country}) souhaite s'attacher vos services pour la saison à venir.`;
+  document.getElementById('mercatoCard').innerHTML = `
+    <div class="club-level">${club.level}</div>
+    <h3 style="font-family:'Anton',sans-serif; text-transform:uppercase; margin-bottom:10px;">${club.name}</h3>
+    <p style="font-size:.85rem; color:rgba(242,237,225,.65); font-weight:300; line-height:1.5;">Pays : ${club.country}</p>
+    <div class="club-salary">Nouveau salaire proposé : ${fmtSalary(salary)} / an</div>
+    <div class="club-salary">Indemnité de transfert : ${fmtSalary(fee)}</div>
+  `;
+  document.getElementById('mercatoLeaveBtn').onclick = ()=>resolveMercato(true, club, salary);
+  document.getElementById('mercatoStayBtn').onclick = ()=>resolveMercato(false, club, salary);
+  showScreen('screen-mercato');
+}
+function resolveMercato(leave, club, salary){
+  if(leave){
+    state.team = club.name;
+    state.division = club.level;
+    state.clubCountry = club.country;
+    state.salary = salary;
+    state.clubsHistory.push(club.name);
+    if(!state.countriesPlayed.includes(club.country)) state.countriesPlayed.push(club.country);
+    state.transfersCount += 1;
+    state.sameClubStreak = 0;
+    state.history.push({age:state.age, text:`Transfert : signature avec ${club.name} (${club.level}, ${club.country}).`, tag:'TRANSFERT'});
+  } else {
+    state.sameClubStreak += 1;
+    state.history.push({age:state.age, text:`Une offre de ${club.name} est déclinée, vous restez fidèle à ${state.team}.`});
+  }
+  save();
+  pendingSeasonEvents.mercatoDone = true;
+  maybeDecision();
+}
+
+function showDecisionEvent(){
+  const ev = pick(DECISION_EVENTS);
+  document.getElementById('decisionContext').textContent = ev.context;
+  const choicesEl = document.getElementById('decisionChoices');
+  choicesEl.innerHTML = '';
+  ev.choices.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'event-choice';
+    const effParts = [];
+    if(c.effects.form) effParts.push(`FORME ${c.effects.form>0?'+':''}${c.effects.form}`);
+    if(c.effects.morale) effParts.push(`MORAL ${c.effects.morale>0?'+':''}${c.effects.morale}`);
+    if(c.effects.rep) effParts.push(`RÉP ${c.effects.rep>0?'+':''}${c.effects.rep}`);
+    if(c.effects.salaryMult) effParts.push(`SALAIRE +${Math.round((c.effects.salaryMult-1)*100)}%`);
+    btn.innerHTML = `<div class="ec-label">${c.label}</div><span class="ec-eff">${effParts.join(' · ')}</span>`;
+    btn.onclick = ()=>resolveDecision(ev, c);
+    choicesEl.appendChild(btn);
+  });
+  showScreen('screen-decision');
+}
+function resolveDecision(ev, choice){
+  const e = choice.effects;
+  if(e.form) state.form = clamp(state.form + e.form, 5, 100);
+  if(e.morale) state.morale = clamp(state.morale + e.morale, 5, 100);
+  if(e.rep) state.subStats.rep = (state.subStats.rep||0) + e.rep;
+  if(e.ment) state.subStats.ment = (state.subStats.ment||0) + e.ment;
+  if(e.cha) state.subStats.cha = (state.subStats.cha||0) + e.cha;
+  if(e.salaryMult) state.salary = Math.round(state.salary * e.salaryMult);
+  state.history.push({age:state.age, text:choice.result});
+  save();
+  pendingSeasonEvents.decisionDone = true;
+  finalizeSeason();
+}
+
+/* ---------------------------------------------------------
    SEASON SIMULATION
 --------------------------------------------------------- */
 const EVENT_POOL = [
-  {text:"Une blessure mineure vous tient à l'écart deux semaines.", form:-12, morale:-4},
+  {text:"Une blessure mineure vous tient à l'écart deux semaines.", form:-12, morale:-4, injury:true},
   {text:"Vous enchaînez les entraînements parfaits, le coach est impressionné.", form:8, morale:6},
-  {text:"Un désaccord contractuel tend vos relations avec le front office.", morale:-10},
+  {text:"Un désaccord contractuel tend vos relations avec la direction sportive.", morale:-10},
   {text:"Un média local vous consacre un portrait élogieux.", morale:8},
   {text:"Vous devenez un leader vestiaire reconnu par vos coéquipiers.", morale:6, overall:2},
   {text:"Une préparation physique intense améliore nettement votre forme.", form:10},
@@ -474,13 +929,18 @@ function playSeason(){
   if(state.retired) return;
   state.age += 1;
   state.proSeasons += 1;
+  save();
+  beginSeasonFlow();
+}
 
+function finalizeSeason(){
   // Random event
   const ev = pick(EVENT_POOL);
   if(ev.form) state.form = clamp(state.form + ev.form, 5, 100);
   if(ev.morale) state.morale = clamp(state.morale + ev.morale, 5, 100);
   if(ev.overall) state.overall += ev.overall;
   if(ev.salaryMult) state.salary = Math.round(state.salary * ev.salaryMult);
+  if(ev.injury && state.form <= 15) state._hadInjury = true;
 
   // Age curve for overall progression
   let growth;
@@ -488,7 +948,17 @@ function playSeason(){
   else if(state.age <= 31) growth = rnd(-1,2);
   else growth = rnd(-5,-1);
   const formFactor = state.form >= 60 ? 1 : 0.4;
+  const prevOverall = state.overall;
   state.overall = clamp(state.overall + Math.round(growth*formFactor), 30, 99);
+
+  if(state._lastOverall !== null){
+    if(state.overall > state._lastOverall) state._growStreak += 1;
+    else state._growStreak = 0;
+  }
+  state._lastOverall = state.overall;
+  if(state.overall < 45) state._hitLow = true;
+  if(state.morale < 20) state._lowMoraleStreak += 1; else state._lowMoraleStreak = 0;
+  if(state.morale > 85) state._highMoraleCount += 1;
 
   // Primary stat progression tied to overall
   const statGain = Math.round((state.overall/10) * (state.form/100) * rnd(8,14));
@@ -496,42 +966,49 @@ function playSeason(){
 
   // Salary progression
   state.salary = Math.round(state.salary * (1 + (state.overall-60)/300 + state.salaryBoost*0.3));
-  if(state.salary < 30000) state.salary = 30000;
+  if(state.salary < 15000) state.salary = 15000;
 
   // Season narrative
-  let seasonText = `Saison ${state.proSeasons} avec les ${state.team} : `;
+  let seasonText = `Saison ${state.proSeasons} avec ${state.team} : `;
   if(state.overall >= 85) seasonText += "une année exceptionnelle, parmi les meilleurs à votre poste.";
   else if(state.overall >= 70) seasonText += "une saison solide qui confirme votre statut de titulaire.";
   else if(state.overall >= 55) seasonText += "une saison correcte, en quête de régularité.";
   else seasonText += "une saison compliquée, la concurrence est rude.";
 
   let tag = null;
-  // Achievements
-  if(state.overall >= 88 && !state.achievements.includes('Pro Bowl') ) {
-    state.achievements.push('Pro Bowl'); tag='PRO BOWL';
-  } else if(state.overall >= 94 && !state.achievements.includes('All-Pro')) {
-    state.achievements.push('All-Pro'); tag='ALL-PRO';
+  // Achievements (trophées de saison)
+  if(state.overall >= 88 && !state.achievements.includes('Sélection internationale')){
+    state.achievements.push('Sélection internationale'); tag='SÉLECTION';
+  } else if(state.overall >= 94 && !state.achievements.includes('Meilleur de son championnat')){
+    state.achievements.push('Meilleur de son championnat'); tag='MEILLEUR JOUEUR';
   }
-  if(state.overall >= 92 && Math.random() < 0.25 && !state.achievements.includes('MVP de la saison')){
-    state.achievements.push('MVP de la saison'); tag='MVP';
+  if(state.overall >= 92 && Math.random() < 0.25 && !state.achievements.includes("Ballon d'Or")){
+    state.achievements.push("Ballon d'Or"); tag='BALLON D\'OR';
   }
   if(state.overall >= 80 && Math.random() < 0.18){
-    const rings = state.achievements.filter(a=>a==='Vainqueur du Super Bowl').length;
-    state.achievements.push('Vainqueur du Super Bowl'); tag='SUPER BOWL';
-    seasonText = `Saison ${state.proSeasons} : victoire au Super Bowl avec les ${state.team} ! Un sommet de carrière.`;
+    state.achievements.push('Titre de champion'); tag='CHAMPION';
+    seasonText = `Saison ${state.proSeasons} : titre de champion avec ${state.team} ! Un sommet de carrière.`;
+  }
+  if(state.overall >= 85 && Math.random() < 0.1 && !state.achievements.includes('Ligue des Champions')){
+    state.achievements.push('Ligue des Champions'); tag='LIGUE DES CHAMPIONS';
+    seasonText = `Saison ${state.proSeasons} : sacre en Ligue des Champions avec ${state.team} !`;
   }
 
   state.history.push({age:state.age, text:seasonText + ' ' + ev.text, tag});
+  save();
+
+  checkBadges();
   save();
 
   // Retirement checks
   const forcedRetire = state.age >= 40;
   const declineRetire = state.age >= 34 && state.overall < 45;
   if(forcedRetire || declineRetire){
-    retireNow(forcedRetire ? "Après une longue carrière, votre corps ne suit plus le rythme de la ligue." : "En perte de vitesse, vous décidez de raccrocher les crampons.");
+    retireNow(forcedRetire ? "Après une longue carrière, votre corps ne suit plus le rythme du haut niveau." : "En perte de vitesse, vous décidez de raccrocher les crampons.");
     return;
   }
 
+  showScreen('screen-dash');
   renderDashboard();
 }
 function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
@@ -540,6 +1017,7 @@ function retireNow(customReason){
   state.retired = true;
   const reason = customReason || "Vous décidez de mettre un terme à votre carrière au sommet.";
   state.history.push({age:state.age, text:`Retraite : ${reason}`});
+  checkBadges();
   save();
   renderRetiredScreen(reason);
   showScreen('screen-retired');
@@ -548,15 +1026,15 @@ function retireNow(customReason){
 
 function renderRetiredScreen(reason){
   const pos = posLabel(state.position);
-  document.getElementById('retiredTitle').textContent = state.achievements.length >= 3 ? "Une légende du gridiron" : "Une carrière s'achève";
+  document.getElementById('retiredTitle').textContent = state.achievements.length >= 3 ? "Une légende du football" : "Une carrière s'achève";
   document.getElementById('retiredSub').textContent =
-    `${pos} pendant ${state.proSeasons} saisons sous les couleurs des ${state.team}. ${reason}`;
+    `${pos} pendant ${state.proSeasons} saisons, sous les couleurs de ${state.clubsHistory.length} club(s) dont ${state.team}. ${reason}`;
   document.getElementById('finalAchv').innerHTML = state.achievements.length
     ? [...new Set(state.achievements)].map(a=>`<span class="achv-chip">${a}${countOf(state.achievements,a)>1?' ×'+countOf(state.achievements,a):''}</span>`).join('')
     : '<span style="color:rgba(242,237,225,.4); font-size:.8rem;">Carrière discrète, sans distinction majeure — mais vécue jusqu\'au bout.</span>';
   document.getElementById('finalOverall').textContent = state.overall;
   document.getElementById('finalSeasons').textContent = state.proSeasons;
-  document.getElementById('finalSalary').textContent = Math.round(state.salary/1000) + ' k$';
+  document.getElementById('finalSalary').textContent = fmtSalary(state.salary);
   document.getElementById('finalPrimaryLabel').textContent = POSITIONS.find(p=>p.k===state.position).stat;
   document.getElementById('finalPrimary').textContent = state.primaryStat;
 
