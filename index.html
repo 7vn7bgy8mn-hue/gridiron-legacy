@@ -235,8 +235,8 @@
       <span class="section-title" id="dashStatus">Saison en cours</span>
     </div>
 
-    <div class="dash-grid">
-      <div class="dash-card">
+    <div style="max-width:520px;">
+      <div class="dash-card" style="border:1px solid var(--line-white);">
         <div class="id-row">
           <div class="id-num" id="idNum">—</div>
           <div class="id-meta">
@@ -259,11 +259,6 @@
           <div class="stat-box"><div class="label">Saisons pro</div><div class="value" id="statSeasons">—</div></div>
         </div>
         <div class="achv-grid" id="achvGrid"></div>
-      </div>
-
-      <div class="dash-card">
-        <div class="bar-label" style="margin-bottom:10px;"><span>Journal de carrière</span></div>
-        <div class="event-log" id="eventLog"></div>
       </div>
     </div>
 
@@ -830,9 +825,6 @@ function renderDashboard(){
 
   const achvGrid = document.getElementById('achvGrid');
   achvGrid.innerHTML = state.achievements.map(a=>`<span class="achv-chip">${a}</span>`).join('') || '<span style="color:rgba(242,237,225,.4); font-size:.8rem;">Aucune distinction pour l\'instant</span>';
-
-  const log = document.getElementById('eventLog');
-  log.innerHTML = state.history.slice().reverse().map(h=>`<div class="event-item"><div class="age">${h.age} ANS</div><p>${h.text}</p>${h.tag?`<span class="tag">${h.tag}</span>`:''}</div>`).join('');
 
   document.getElementById('retireBtn').style.display = state.age >= 30 ? 'inline-flex' : 'none';
 }
