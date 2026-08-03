@@ -666,7 +666,7 @@ function renderDraftStep(){
     inner += `<h3>${item.label}</h3><p>${item.d}</p>`;
     if(item.mods){ inner += `<div class="mods-line">${modsLine(item.mods)}</div>`; }
     card.innerHTML = inner;
-    card.onclick = ()=>{ draftPicks[f.key]=item.k; renderDraftStep(); };
+    card.onclick = ()=>{ draftPicks[f.key]=item.k; renderDraftStep(); setTimeout(nextStep, 250); };
     grid.appendChild(card);
   });
   document.getElementById('nextStepBtn').disabled = !draftPicks[f.key];
